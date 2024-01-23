@@ -1,41 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fastify + Typescript App</title>
-    <style>
-      body {
-        font-family: Georgia, "Times New Roman", Times, serif;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Welcome to Fastify + Typescript App 🔥</h1>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Notifier 🔥</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 90vh;
+      background-color: #2c363b;
+      font-family: monospace, "Times New Roman", Times, serif;
+      color: #fff;
+    }
+
+    .app {
+      max-width: 1200px;
+      border-radius: 2px;
+      border: white 2px dotted;
+      padding: 2rem;
+    }
+
+    a {
+      color: #35a4ff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <h1>Welcome to Task Notifier 🔥</h1>
+
+    <h2>About</h2>
+    <p>
+      Task-Notifier is an innovative task management application designed to keep you seamlessly organized and on top of
+      your responsibilities. With a powerful twist of real-time notifications, this app ensures you never miss a
+      deadline
+      or overlook essential tasks. </p>
+
     <h2>API Documentation</h2>
-    <div id="app"></div>
+    <div id="api-docs"></div>
 
-    <script>
-      let html = "";
-      const routes = [
-        {
-          name: "User API",
-          path: "/api/v1/user",
-        },
-      ];
+  </div>
 
-      async function initApp() {
-        for (const route of routes) {
-          const response = await fetch(route.path);
-          const json = await response.json();
-          html += `<h3>${route.name}</h3>
-                    <a href="${route.path}">${route.path}</a>
-                    <pre>${JSON.stringify(json)}</pre>`;
-        }
-        document.getElementById("app").innerHTML = html;
+  <script>
+    let html = "";
+    const routes = [
+      {
+        name: "Auth API",
+        path: "/api/auth",
+        description: "Used to authenticate users"
+      },
+      {
+        name: "Task API",
+        path: "/api/task",
+        description: "Used to create, update, delete and get tasks"
+      },
+    ];
+
+    async function initApp() {
+      for (const route of routes) {
+        html += `<h4> <a href="${route.path}">${route.path}</a> <span> : ${route.description}</h4>`;
       }
+      document.getElementById("api-docs").innerHTML = html;
+    }
 
-      initApp();
-    </script>
-  </body>
+    initApp();
+  </script>
+</body>
+
 </html>
