@@ -38,38 +38,11 @@
     <p>
       Task-Notifier is an innovative task management application designed to keep you seamlessly organized and on top of
       your responsibilities. With a powerful twist of real-time notifications, this app ensures you never miss a
-      deadline
-      or overlook essential tasks. </p>
-
-    <h2>API Documentation</h2>
-    <div id="api-docs"></div>
-
+      deadline or overlook essential tasks. </p>
+    <h2>
+      <a href="/documentation">View API Documentation</a>
+    </h2>
   </div>
-
-  <script>
-    let html = "";
-    const routes = [
-      {
-        name: "Auth API",
-        path: "/api/auth",
-        description: "Used to authenticate users"
-      },
-      {
-        name: "Task API",
-        path: "/api/task",
-        description: "Used to create, update, delete and get tasks"
-      },
-    ];
-
-    async function initApp() {
-      for (const route of routes) {
-        html += `<h4> <a href="${route.path}">${route.path}</a> <span> : ${route.description}</h4>`;
-      }
-      document.getElementById("api-docs").innerHTML = html;
-    }
-
-    initApp();
-  </script>
 </body>
 
 </html>

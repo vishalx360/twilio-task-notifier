@@ -16,9 +16,13 @@
   "author": "Matschik <mathieu.schimmerling@protonmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@fastify/swagger": "^8.14.0",
+    "@fastify/swagger-ui": "^2.1.0",
     "@joggr/fastify-prisma": "^1.2.2",
     "@prisma/client": "^5.8.1",
-    "fastify": "^4.25.2"
+    "fastify": "^4.25.2",
+    "fastify-type-provider-zod": "^1.1.9",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.5",

@@ -11,6 +11,17 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model User {
+  id           String   @id @default(cuid())
+  phone_number String   @unique
+  priority     Int
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  // Relationships
+  tasks Task[]
+}
+
 model Task {
   id          String    @id @default(cuid())
   title       String
@@ -38,15 +49,4 @@ model SubTask {
   // Relationships
   task    Task   @relation(fields: [task_id], references: [id])
   task_id String
-}
-
-model User {
-  id           String   @id @default(cuid())
-  phone_number String
-  priority     Int
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-
-  // Relationships
-  tasks Task[]
 }
