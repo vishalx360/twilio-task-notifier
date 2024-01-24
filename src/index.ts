@@ -1,7 +1,15 @@
-import fastify from "./app";
+import Fastify from "fastify";
 import { env } from "./env";
 
+import app from "./app";
 const PORT = Number(env.PORT) || 3000;
+
+
+const fastify = Fastify({ logger: true });
+
+
+fastify.register(app);
+
 
 fastify.listen({ port: PORT });
 

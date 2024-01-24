@@ -1,4 +1,3 @@
-import Fastify from "fastify";
 import router from "./router";
 
 import authenticate from "./plugins/authenticate";
@@ -6,14 +5,16 @@ import prisma from "./plugins/prisma";
 import swagger from "./plugins/swagger";
 import validator from "./plugins/validator";
 
-const fastify = Fastify({ logger: true });
+import { FastifyInstance, FastifyServerOptions } from 'fastify';
 
-// plugins
-fastify.register(swagger);
-fastify.register(validator);
-fastify.register(authenticate);
-fastify.register(prisma);
+export default async function (fastify: FastifyInstance, _opts: FastifyServerOptions, done: () => void) {
+    // plugins
+    fastify.register(swagger);
+    fastify.register(validator);
+    fastify.register(authenticate);
+    fastify.register(prisma);
 
-fastify.register(router);
+    fastify.register(router);
 
-export default fastify;
+    done()
+}
