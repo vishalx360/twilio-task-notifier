@@ -63,6 +63,7 @@ export default async function subtaskController(fastify: FastifyInstance) {
         });
 
       } catch (error) {
+        fastify.log.error(error);
         reply.status(500).send({ error: 'Internal Server Error' });
       }
     }
@@ -94,6 +95,7 @@ export default async function subtaskController(fastify: FastifyInstance) {
 
         reply.send(subtasks);
       } catch (error) {
+        fastify.log.error(error);
         reply.status(500).send({ error: 'Internal Server Error' });
       }
     }
@@ -127,6 +129,7 @@ export default async function subtaskController(fastify: FastifyInstance) {
           reply.send(subtask);
         });
       } catch (error) {
+        fastify.log.error(error);
         reply.status(500).send({ error: 'Internal Server Error' });
       }
     }
@@ -154,6 +157,7 @@ export default async function subtaskController(fastify: FastifyInstance) {
 
         reply.send({ message: 'Subtask deleted successfully' });
       } catch (error) {
+        fastify.log.error(error);
         reply.status(500).send({ error: 'Internal Server Error' });
       }
     }

@@ -29,6 +29,7 @@
     "fastify": "^4.25.2",
     "fastify-plugin": "^4.5.1",
     "fastify-type-provider-zod": "^1.1.9",
+    "twilio": "^4.20.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
