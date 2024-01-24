@@ -14,6 +14,9 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
                 version: '1.0.0',
             },
             servers: [{
+                url: "https://twilio-task-notifier.onrender.com",
+                description: "Remote Server"
+            }, {
                 url: "http://localhost:3000",
                 description: "Local Server"
             }],

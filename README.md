@@ -2,6 +2,10 @@
 
 > This repository contains my solution for an assignment related to the Backend Engineer Intern position at [Listed](https://listed.fans).
 
+> [Checkout hosted demo](https://twilio-task-notifier.onrender.com)
+
+> [Checkout Swagger/OpenAPI Documentation](https://twilio-task-notifier.onrender.com/documentation)
+
 ![Swagger Ui/OpenAPI Spec](./images/SwaggerUI.png "Swagger UI Screenshot")
 
 Twilio-Task-Notifier is a feature-rich task management application designed to enhance your organizational efficiency with real-time notifications via phone calls. This backend API is built using Fastify, Typescript, Prisma, and connects to a Postgres database. It leverages Cron Jobs to ensure timely updates and notifications.
