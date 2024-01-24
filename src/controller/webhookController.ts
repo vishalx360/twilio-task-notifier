@@ -1,28 +1,38 @@
+import { Task, User } from "@prisma/client";
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
+import VoiceResponse from "twilio/lib/twiml/VoiceResponse";
 import z from "zod";
-import { GetNewPriority } from "../util";
-import { Task, User } from "@prisma/client";
+import { env } from "../env";
 import twilioClient from "../twilioClient";
+import { GetNewPriority } from "../util";
 
 // Define Zod schema for WEBHOOK
 const WEBHOOK_SCHEMA = z.object({
     WEBHOOK_API_KEY: z.string(),
+    // WEBHOOK_SIGNATURE: z.string(),
 });
 
+const TWILIO_WEBHOOK_SCHEMA = z.object({
+    WEBHOOK_API_KEY: z.string(),
+    // PHONE_NUMBER: z.string().optional(),
+});
+
+
 export default async function webhookController(fastify: FastifyInstance) {
-    // GET /webhook/update-task-priority
+    // POST /webhook/update-task-priority
     fastify.withTypeProvider<ZodTypeProvider>().route({
-        method: 'GET',
+        method: 'POST',
         url: '/update-task-priority',
         schema: {
-            tags: ['webhook'],
+            tags: ['cron-job webhook'],
+            security: [{ apikeyAuth: [] }],
             body: WEBHOOK_SCHEMA,
             description: "Update task's priority based on due-date. Triggered by a cron job.",
         },
         onRequest: async (request, reply) => {
             const { WEBHOOK_API_KEY } = request.body;
-            if (WEBHOOK_API_KEY !== process.env.WEBHOOK_API_KEY) {
+            if (WEBHOOK_API_KEY !== env.WEBHOOK_API_KEY) {
                 reply.status(401).send({ error: 'Unauthorized', message: 'Invalid WEBHOOK_API_KEY provided' });
             }
         },
@@ -51,18 +61,19 @@ export default async function webhookController(fastify: FastifyInstance) {
         }
     });
 
-    // GET /webhook/setup-twilio-call
+    // POST /webhook/setup-twilio-call
     fastify.withTypeProvider<ZodTypeProvider>().route({
-        method: 'GET',
+        method: 'POST',
         url: '/setup-twilio-call',
         schema: {
-            tags: ['webhook'],
+            tags: ['cron-job webhook'],
+            security: [{ apikeyAuth: [] }],
             body: WEBHOOK_SCHEMA,
             description: 'Voice call webhook based on task due date and user priority.',
         },
         onRequest: async (request, reply) => {
             const { WEBHOOK_API_KEY } = request.body;
-            if (WEBHOOK_API_KEY !== process.env.WEBHOOK_API_KEY) {
+            if (WEBHOOK_API_KEY !== env.WEBHOOK_API_KEY) {
                 reply.status(401).send({ error: 'Unauthorized', message: 'Invalid WEBHOOK_API_KEY provided' });
             }
         },
@@ -107,10 +118,38 @@ export default async function webhookController(fastify: FastifyInstance) {
             }
         },
     });
+    // POST /webhook/handel-twilio-call
+    fastify.withTypeProvider<ZodTypeProvider>().route({
+        method: 'POST',
+        url: '/handle-twilio-call',
+        schema: {
+            tags: ['twilio webhook'],
+            security: [{ apikeyAuth: [] }],
+            body: TWILIO_WEBHOOK_SCHEMA,
+            description: 'Handle Twilio call webhook.',
+        },
+        handler: async (_request, reply) => {
+            try {
+                // todo: get user's phone number from request for dynamic voice response
+                const vr = new VoiceResponse();
+                vr.say({ voice: 'woman' }, 'Hello! This is a friendly reminder from Task Notifier.');
+                vr.pause({ length: 1 });
+                vr.say({ voice: 'woman' }, 'You have one or more tasks due soon.');
+                vr.pause({ length: 1 });
+                vr.say({ voice: 'woman' }, 'Please review your tasks and take necessary actions.');
+                vr.pause({ length: 1 });
+                vr.say({ voice: 'woman' }, 'Thank you for using Task Notifier. Have a productive day!');
 
+                reply.send(vr.toString()); // Output the XML response
+            } catch (error) {
+                fastify.log.error(error);
+                reply.status(500).send({ error: 'Internal Server Error' });
+            }
+        },
+    });
 }
-export type TaskWithUser = Task & { user: User | null };
 
+export type TaskWithUser = Task & { user: User | null };
 
 // Utilitu Function to make calls phonenumber using Twilio
 export async function MakePhoneCalls(phoneNumbers: (string | undefined)[]): Promise<void> {
@@ -118,9 +157,9 @@ export async function MakePhoneCalls(phoneNumbers: (string | undefined)[]): Prom
         if (phoneNumber) {
             twilioClient.calls
                 .create({
-                    url: 'http://demo.twilio.com/docs/voice.xml',
                     to: phoneNumber,
-                    from: process.env.TWILIO_PHONE_NUMBER!,
+                    from: env.TWILIO_PHONE_NUMBER!,
+                    url: `${env.HOST_URL}/webhook/handel-twilio-call`,
                 })
                 .then(call => console.log(call.sid))
                 .catch(err => console.log(err));

@@ -21,6 +21,8 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
                 { name: 'auth', description: 'Authentication related end-points' },
                 { name: 'task', description: 'Task related end-points' },
                 { name: 'subtask', description: 'Subtask related end-points' },
+                { name: 'cron-job webhook', description: 'Webhook related end-points for cronjob' },
+                { name: 'twilio webhook', description: 'Webhook related end-points for twilio' },
             ],
             components: {
                 securitySchemes: {
@@ -29,6 +31,12 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
                         scheme: 'bearer',
                         bearerFormat: 'JWT',
                         description: 'JWT Token',
+                    },
+                    apikeyAuth: {
+                        type: 'apiKey',
+                        name: 'WEBHOOK_API_KEY',
+                        in: 'header',
+                        description: 'Webhook API Key',
                     },
                 },
             },

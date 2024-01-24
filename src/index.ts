@@ -1,6 +1,7 @@
 import fastify from "./app";
+import { env } from "./env";
 
-const FASTIFY_PORT = Number(process.env.FASTIFY_PORT) || 3000;
+const FASTIFY_PORT = Number(env.FASTIFY_PORT) || 3000;
 
 fastify.listen({ port: FASTIFY_PORT });
 
