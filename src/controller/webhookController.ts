@@ -2,40 +2,21 @@ import { Task, User } from "@prisma/client";
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import VoiceResponse from "twilio/lib/twiml/VoiceResponse";
-import z from "zod";
 import { env } from "../env";
 import twilioClient from "../twilioClient";
 import { GetNewPriority } from "../util";
 
-// Define Zod schema for WEBHOOK
-const WEBHOOK_SCHEMA = z.object({
-    WEBHOOK_API_KEY: z.string(),
-    // WEBHOOK_SIGNATURE: z.string(),
-});
-
-const TWILIO_WEBHOOK_SCHEMA = z.object({
-    WEBHOOK_API_KEY: z.string(),
-    // PHONE_NUMBER: z.string().optional(),
-});
-
-
 export default async function webhookController(fastify: FastifyInstance) {
-    // POST /webhook/update-task-priority
+    // GET /webhook/update-task-priority
     fastify.withTypeProvider<ZodTypeProvider>().route({
-        method: 'POST',
+        method: 'GET',
         url: '/update-task-priority',
         schema: {
             tags: ['cron-job webhook'],
             security: [{ apikeyAuth: [] }],
-            body: WEBHOOK_SCHEMA,
             description: "Update task's priority based on due-date. Triggered by a cron job.",
         },
-        onRequest: async (request, reply) => {
-            const { WEBHOOK_API_KEY } = request.body;
-            if (WEBHOOK_API_KEY !== env.WEBHOOK_API_KEY) {
-                reply.status(401).send({ error: 'Unauthorized', message: 'Invalid WEBHOOK_API_KEY provided' });
-            }
-        },
+        onRequest: fastify.authenticateWebhook,
         handler: async (_request, reply) => {
             try {
                 const tasks = await fastify.prisma.task.findMany({
@@ -45,7 +26,7 @@ export default async function webhookController(fastify: FastifyInstance) {
                     },
                     select: { id: true, due_date: true },
                 });
-                await fastify.prisma.$transaction((prismaTX) => {
+                const result = await fastify.prisma.$transaction((prismaTX) => {
                     const UpdateTaskStatusPromises = tasks.map(async (task) => {
                         return prismaTX.task.update({
                             where: { id: task.id },
@@ -54,6 +35,7 @@ export default async function webhookController(fastify: FastifyInstance) {
                     });
                     return Promise.all(UpdateTaskStatusPromises);
                 });
+                reply.send(result);
             } catch (error) {
                 fastify.log.error(error);
                 reply.status(500).send({ error: 'Internal Server Error' });
@@ -61,22 +43,16 @@ export default async function webhookController(fastify: FastifyInstance) {
         }
     });
 
-    // POST /webhook/setup-twilio-call
+    // GET /webhook/setup-twilio-call
     fastify.withTypeProvider<ZodTypeProvider>().route({
-        method: 'POST',
+        method: 'GET',
         url: '/setup-twilio-call',
         schema: {
             tags: ['cron-job webhook'],
             security: [{ apikeyAuth: [] }],
-            body: WEBHOOK_SCHEMA,
             description: 'Voice call webhook based on task due date and user priority.',
         },
-        onRequest: async (request, reply) => {
-            const { WEBHOOK_API_KEY } = request.body;
-            if (WEBHOOK_API_KEY !== env.WEBHOOK_API_KEY) {
-                reply.status(401).send({ error: 'Unauthorized', message: 'Invalid WEBHOOK_API_KEY provided' });
-            }
-        },
+        onRequest: fastify.authenticateWebhook,
         handler: async (_request, reply) => {
             try {
                 // Fetch tasks with due dates and users with priority
@@ -125,9 +101,9 @@ export default async function webhookController(fastify: FastifyInstance) {
         schema: {
             tags: ['twilio webhook'],
             security: [{ apikeyAuth: [] }],
-            body: TWILIO_WEBHOOK_SCHEMA,
             description: 'Handle Twilio call webhook.',
         },
+        onRequest: fastify.authenticateWebhook,
         handler: async (_request, reply) => {
             try {
                 // todo: get user's phone number from request for dynamic voice response

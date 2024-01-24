@@ -7,6 +7,7 @@ import { env } from '../env';
 declare module 'fastify' {
     interface FastifyInstance {
         authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void>;
+        authenticateWebhook(request: FastifyRequest, reply: FastifyReply): Promise<void>;
     }
 }
 
@@ -24,6 +25,18 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
         }
     });
 
-}, { name: 'authenticate' });
+    fastify.decorate('authenticateWebhook', async function (request: FastifyRequest, reply: FastifyReply) {
+        try {
+            const WEBHOOK_API_KEY = request.headers?.api_key;
+            if (WEBHOOK_API_KEY !== env.WEBHOOK_API_KEY) {
+                reply.status(401).send({ error: 'Unauthorized', message: 'Invalid WEBHOOK_API_KEY provided' });
+            }
+        } catch (err) {
+            reply.send(err);
+        }
+    });
+
+
+}, { name: 'authenticate-plugin' });
 
 export default plugin;
