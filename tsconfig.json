@@ -14,10 +14,16 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
+  "paths": {
+    "@/*": [
+      "./src/*"
+    ]
+  },
   "exclude": [
     "node_modules"
   ],
   "include": [
-    "./src/**/*.ts"
-  ]
+    "./src/**/*.ts",
+    "src/env.ts"
+  ],
 }

@@ -1,45 +1,98 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
+import { hash, verify } from 'argon2';
 
-const SIGNIN_SCHEMA = z.object({
+const LOGIN_SCHEMA = z.object({
   phone: z.string().max(32).describe('Phone Number of the user'),
   password: z.string().max(32).describe('Password of the user account'),
 });
 
-const SIGNUP_SCHEMA = SIGNIN_SCHEMA.extend({
-  name: z.string().max(32).describe('Name of the user'),
+const REGISTER_SCHEMA = LOGIN_SCHEMA.extend({
   phone: z.string().max(32).describe('Phone Number of the user'),
   password: z.string().max(32).describe('Password of the user account'),
   confirmPassword: z.string().max(32).describe('Password of the user account'),
 })
 
+
 export default async function authController(fastify: FastifyInstance) {
   // GET /api/auth
-  fastify.get("/", async function (_request, reply) {
-    // TODO: return current user
-    reply.send({
-      message: "Hello, Auth!",
+  fastify.get("/", { onRequest: fastify.authenticate },
+    async function (request, reply) {
+      reply.send(request.user);
     });
-  });
-  // POST /api/auth/signin
+
+
+  // POST /api/auth/login
   fastify.withTypeProvider<ZodTypeProvider>().route({
     method: 'POST',
-    url: '/signin',
-    schema: { body: SIGNIN_SCHEMA },
-    handler: (_request, reply) => {
-      // TODO: check for correct credentials
-      reply.send('ok');
+    url: '/login',
+    schema: { body: LOGIN_SCHEMA },
+    handler: async (request, reply) => {
+      const { password, phone } = request.body
+      const user = await fastify.prisma.user.findUnique({ where: { phone } })
+      if (!user) {
+        return reply.code(404).send({
+          message: 'User does not exist with this phone',
+        })
+      }
+      try {
+        const correct = await verify(user.password, password);
+        if (!correct) {
+          return reply.code(401).send({
+            message: 'Incorrect Password',
+          })
+        }
+
+        const token = await reply.jwtSign({
+          id: user.id,
+          phone: user.phone,
+        })
+
+        return reply.code(201).send({
+          message: `Logged in successfully, token generated ${user.phone}`,
+          token,
+        })
+      } catch (e) {
+        return reply.code(500).send(e)
+      }
     },
   });
-  // POST /api/auth/signup
+  // POST /api/auth/register
   fastify.withTypeProvider<ZodTypeProvider>().route({
     method: 'POST',
-    url: '/signup',
-    schema: { body: SIGNUP_SCHEMA },
-    handler: (_request, reply) => {
-      // TODO: check if user already exist with phonenumber, if not create one
-      reply.send('ok');
+    url: '/register',
+    schema: { body: REGISTER_SCHEMA },
+    handler: async (request, reply) => {
+      const { password, phone, confirmPassword } = request.body
+
+      if (password !== confirmPassword) {
+        return reply.code(400).send({
+          message: 'Password and confirm-password should be same',
+        })
+      }
+
+      const user = await fastify.prisma.user.findUnique({ where: { phone } })
+
+      if (user) {
+        return reply.code(400).send({
+          message: 'User already exists with this phone',
+        })
+      }
+      try {
+        const hash_value = await hash(password)
+        const user = await fastify.prisma.user.create({
+          data: {
+            phone,
+            password: hash_value,
+          },
+        })
+        return reply.code(201).send({
+          message: `Registered user successfully with ${user.phone}`
+        })
+      } catch (e) {
+        return reply.code(500).send(e)
+      }
     },
   });
 }

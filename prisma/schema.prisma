@@ -12,14 +12,14 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  phone_number String   @unique
-  priority     Int
-  created_at   DateTime @default(now())
-  updated_at   DateTime @updatedAt
-
+  id         String   @id @default(cuid())
+  phone      String   @unique
+  priority   Int?     @default(2)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  password   String
   // Relationships
-  tasks Task[]
+  tasks      Task[]
 }
 
 model Task {

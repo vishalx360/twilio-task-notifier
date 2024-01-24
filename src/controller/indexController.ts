@@ -6,7 +6,7 @@ const { readFile } = promises;
 
 export default async function indexController(fastify: FastifyInstance) {
   // GET /
-  fastify.get("/", async function (
+  fastify.get("", async function (
     _request: FastifyRequest,
     reply: FastifyReply
   ) {
