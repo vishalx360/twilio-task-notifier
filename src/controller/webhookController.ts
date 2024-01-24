@@ -132,13 +132,13 @@ export default async function webhookController(fastify: FastifyInstance) {
             try {
                 // todo: get user's phone number from request for dynamic voice response
                 const vr = new VoiceResponse();
-                vr.say({ voice: 'woman' }, 'Hello! This is a friendly reminder from Task Notifier.');
+                vr.say({ voice: 'woman' }, 'Hello! This is a friendly reminder from Twilio Task Notifier.');
                 vr.pause({ length: 1 });
                 vr.say({ voice: 'woman' }, 'You have one or more tasks due soon.');
                 vr.pause({ length: 1 });
                 vr.say({ voice: 'woman' }, 'Please review your tasks and take necessary actions.');
                 vr.pause({ length: 1 });
-                vr.say({ voice: 'woman' }, 'Thank you for using Task Notifier. Have a productive day!');
+                vr.say({ voice: 'woman' }, 'Thank you for using Twilio Task Notifier. Have a productive day!');
 
                 reply.send(vr.toString()); // Output the XML response
             } catch (error) {

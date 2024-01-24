@@ -1,7 +1,7 @@
 {
-  "name": "fastify-typescript-starter",
-  "version": "4.1.0",
-  "description": "Fastify TypeScript starter repository",
+  "name": "twilio-task-notifier",
+  "version": "1.0.0",
+  "description": "Twilio-Task-Notifier is a feature-rich task management application designed to enhance your organizational efficiency with real-time notifications via phone calls. This backend API is built using Fastify, Typescript, Prisma, and connects to a Postgres database. It leverages Cron Jobs to ensure timely updates and notifications.",
   "scripts": {
     "watch": "tsc --watch --preserveWatchOutput --pretty",
     "dev": "cross-env NODE_ENV=development nodemon",
@@ -13,7 +13,7 @@
     "updatedb": "npx prisma db push",
     "studio": "npx prisma studio"
   },
-  "author": "Matschik <mathieu.schimmerling@protonmail.com>",
+  "author": "Vishal Kumar 25267239+vishalx360@users.noreply.github.com",
   "license": "MIT",
   "dependencies": {
     "@fastify/autoload": "^5.8.0",

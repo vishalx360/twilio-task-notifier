@@ -9,8 +9,8 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
     fastify.register(fastifySwagger, {
         openapi: {
             info: {
-                title: 'task-notifier',
-                description: `Task-Notifier is an innovative task management application designed to keep you seamlessly organized and on top of your responsibilities. With a powerful twist of real-time notifications, this app ensures you never miss a deadline or overlook essential tasks.`,
+                title: 'Twilio Task Notifier',
+                description: `Twilio Task Notifier is an innovative task management application designed to keep you seamlessly organized and on top of your responsibilities. With a powerful twist of real-time notifications, this app ensures you never miss a deadline or overlook essential tasks.`,
                 version: '1.0.0',
             },
             servers: [{
