@@ -41,7 +41,7 @@ model Task {
 
   // Relationships
   subtasks SubTask[]
-  user     User?     @relation(fields: [userId], references: [id])
+  user     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String?
 }
 
@@ -53,6 +53,6 @@ model SubTask {
   deleted_at DateTime?
 
   // Relationships
-  task    Task   @relation(fields: [task_id], references: [id])
+  task    Task   @relation(fields: [task_id], references: [id], onDelete: Cascade)
   task_id String
 }
