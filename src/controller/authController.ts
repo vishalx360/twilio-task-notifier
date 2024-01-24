@@ -96,7 +96,7 @@ export default async function authController(fastify: FastifyInstance) {
         })
 
         return reply.code(201).send({
-          message: `Logged in successfully, token generated ${user.phone}`,
+          message: `Logged in successfully, auth token generated for ${user.phone}`,
           token,
         })
       } catch (e) {
@@ -109,8 +109,8 @@ export default async function authController(fastify: FastifyInstance) {
   fastify.withTypeProvider<ZodTypeProvider>().route({
     method: 'GET',
     url: '/',
+    onRequest: fastify.authenticate,
     schema: {
-      security: [],
       tags: ['auth'],
       description: 'Get current user',
     },
