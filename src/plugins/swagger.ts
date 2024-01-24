@@ -17,11 +17,31 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
                 url: "http://localhost:3000",
                 description: "Local Server"
             }],
+            tags: [
+                { name: 'auth', description: 'Authentication related end-points' },
+                { name: 'task', description: 'Task related end-points' },
+                { name: 'subtask', description: 'Subtask related end-points' },
+            ],
+            components: {
+                securitySchemes: {
+                    bearerAuth: {
+                        type: 'http',
+                        scheme: 'bearer',
+                        bearerFormat: 'JWT',
+                        description: 'JWT Token',
+                    },
+                },
+            },
+
+            security: [{
+                bearerAuth: [],
+            }],
         },
+        hideUntagged: true,
         stripBasePath: true,
         transform: createJsonSchemaTransform({
             skipList: ['/documentation/static/*']
-        })
+        }),
     });
 
     fastify.register(fastifySwaggerUI, {

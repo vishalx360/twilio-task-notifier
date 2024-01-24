@@ -2,10 +2,12 @@ import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import fastifyJWT from '@fastify/jwt';
 import fp from 'fastify-plugin';
 
+
 declare module 'fastify' {
     interface FastifyInstance {
         authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void>;
     }
+
 }
 
 const plugin = fp(async (fastify: FastifyInstance,) => {
@@ -21,6 +23,7 @@ const plugin = fp(async (fastify: FastifyInstance,) => {
             reply.send(err);
         }
     });
+
 }, { name: 'authenticate' });
 
 export default plugin;
