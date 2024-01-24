@@ -13,7 +13,11 @@ Twilio-Task-Notifier is a feature-rich task management application designed to e
 - Implements Typescript for strong typing and enhanced developer experience.
 - Leverages Prisma as an efficient and type-safe database access tool.
 - Stores data in a Postgres database for reliability and scalability.
-- Employs Cron Jobs for scheduled tasks and automatic notifications.
+- Employs Cron Jobs for scheduled tasks using https://cron-job.org
+
+## Database Schema Diagram
+
+![Database Schema Diagram](./images/db-schema.png "Database Schema Diagram")
 
 ## Installation
 
