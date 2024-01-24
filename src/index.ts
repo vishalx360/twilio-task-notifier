@@ -1,11 +1,13 @@
 import fastify from "./app";
-import { env } from "./env";
 
-const FASTIFY_PORT = Number(env.FASTIFY_PORT) || 3000;
 
-fastify.listen({ port: FASTIFY_PORT });
+const port = Number(process.env.PORT) || 3000;
+const host = ("RENDER" in process.env) ? `0.0.0.0` : `localhost`;
 
-console.log(`🚀  Fastify server running on port http://localhost:${FASTIFY_PORT}`);
+
+fastify.listen({ host, port });
+
+console.log(`🚀  Fastify server running on port http://localhost:${port}`);
 console.log(`Route index: /`);
 console.log(`Route auth: /api/auth`);
 console.log(`Route task: /api/task`);

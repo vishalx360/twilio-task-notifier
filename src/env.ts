@@ -4,6 +4,7 @@ import { z } from "zod";
 
 export const env = createEnv({
     server: {
+        PORT: z.string().min(1).optional(),
         HOST_URL: z.string().url(),
         DATABASE_URL: z.string().url(),
         DIRECT_URL: z.string().url(),
