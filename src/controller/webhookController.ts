@@ -7,7 +7,7 @@ import twilioClient from "../twilioClient";
 import { GetNewPriority } from "../util";
 
 export default async function webhookController(fastify: FastifyInstance) {
-    // GET /webhook/update-task-priority
+    // GET /api/webhook/update-task-priority
     fastify.withTypeProvider<ZodTypeProvider>().route({
         method: 'GET',
         url: '/update-task-priority',
@@ -43,7 +43,7 @@ export default async function webhookController(fastify: FastifyInstance) {
         }
     });
 
-    // GET /webhook/setup-twilio-call
+    // GET /api/webhook/setup-twilio-call
     fastify.withTypeProvider<ZodTypeProvider>().route({
         method: 'GET',
         url: '/setup-twilio-call',
@@ -79,22 +79,23 @@ export default async function webhookController(fastify: FastifyInstance) {
                 }, {} as Record<number, TaskWithUser[]>);
 
                 // Process tasks by priority
+                const allCallSids: string[] = [];
                 for (let priority = 0; priority <= 2; priority++) {
                     const tasksToCall = tasksByPriority[priority];
                     if (tasksToCall && tasksToCall.length > 0) {
                         const phoneNumbers = tasksToCall.map((task) => task.user?.phone);
-                        await MakePhoneCalls(phoneNumbers);
+                        allCallSids.push(...await MakePhoneCalls(phoneNumbers));
                         break; // Stop processing priorities after the first non-empty priority
                     }
                 }
-                reply.send({ success: true });
+                reply.send(allCallSids);
             } catch (error) {
                 fastify.log.error(error);
                 reply.status(500).send({ error: 'Internal Server Error' });
             }
         },
     });
-    // POST /webhook/handel-twilio-call
+    // POST /api/webhook/handel-twilio-call
     fastify.withTypeProvider<ZodTypeProvider>().route({
         method: 'POST',
         url: '/handle-twilio-call',
@@ -128,17 +129,21 @@ export default async function webhookController(fastify: FastifyInstance) {
 export type TaskWithUser = Task & { user: User | null };
 
 // Utilitu Function to make calls phonenumber using Twilio
-export async function MakePhoneCalls(phoneNumbers: (string | undefined)[]): Promise<void> {
+export async function MakePhoneCalls(phoneNumbers: (string | undefined)[]): Promise<string[]> {
+    const allCallSids: string[] = []
     for (const phoneNumber of phoneNumbers) {
         if (phoneNumber) {
             twilioClient.calls
                 .create({
                     to: phoneNumber,
                     from: env.TWILIO_PHONE_NUMBER!,
-                    url: `${env.HOST_URL}/webhook/handel-twilio-call`,
+                    url: `${env.HOST_URL}/api/webhook/handel-twilio-call`,
                 })
-                .then(call => console.log(call.sid))
+                .then(call => {
+                    allCallSids.push(call.sid);
+                })
                 .catch(err => console.log(err));
         }
     }
+    return allCallSids;
 }
