@@ -39,14 +39,14 @@ dependencies:
     specifier: ^16.4.0
     version: 16.4.0
   fastify:
-    specifier: ^4.25.2
-    version: 4.25.2
+    specifier: ^4.26.0
+    version: 4.26.0
   fastify-plugin:
     specifier: ^4.5.1
     version: 4.5.1
   fastify-type-provider-zod:
     specifier: ^1.1.9
-    version: 1.1.9(fastify@4.25.2)(zod@3.22.4)
+    version: 1.1.9(fastify@4.26.0)(zod@3.22.4)
   twilio:
     specifier: ^4.20.1
     version: 4.20.1
@@ -716,19 +716,19 @@ packages:
     engines: {node: '>=18.0.0'}
     dev: true
 
-  /fastify-type-provider-zod@1.1.9(fastify@4.25.2)(zod@3.22.4):
+  /fastify-type-provider-zod@1.1.9(fastify@4.26.0)(zod@3.22.4):
     resolution: {integrity: sha512-Ztnu1ZWJEKJouZvdTyfgjuVqS+A4JLoCbWBvFqFhfnrg6YQvEvW+5cJvP98kNbuV5gjfpWmHSOTi3BpkidJPQg==}
     peerDependencies:
       fastify: ^4.0.0
       zod: ^3.14.2
     dependencies:
-      fastify: 4.25.2
+      fastify: 4.26.0
       zod: 3.22.4
       zod-to-json-schema: 3.22.3(zod@3.22.4)
     dev: false
 
-  /fastify@4.25.2:
-    resolution: {integrity: sha512-SywRouGleDHvRh054onj+lEZnbC1sBCLkR0UY3oyJwjD4BdZJUrxBqfkfCaqn74pVCwBaRHGuL3nEWeHbHzAfw==}
+  /fastify@4.26.0:
+    resolution: {integrity: sha512-Fq/7ziWKc6pYLYLIlCRaqJqEVTIZ5tZYfcW/mDK2AQ9v/sqjGFpj0On0/7hU50kbPVjLO4de+larPA1WwPZSfw==}
     dependencies:
       '@fastify/ajv-compiler': 3.5.0
       '@fastify/error': 3.4.1
@@ -737,7 +737,7 @@ packages:
       avvio: 8.2.1
       fast-content-type-parse: 1.1.0
       fast-json-stringify: 5.10.0
-      find-my-way: 7.7.0
+      find-my-way: 8.1.0
       light-my-request: 5.11.0
       pino: 8.17.2
       process-warning: 3.0.0
@@ -777,8 +777,8 @@ packages:
       to-regex-range: 5.0.1
     dev: true
 
-  /find-my-way@7.7.0:
-    resolution: {integrity: sha512-+SrHpvQ52Q6W9f3wJoJBbAQULJuNEEQwBvlvYwACDhBTLOTMiQ0HYWh4+vC3OivGP2ENcTI1oKlFA2OepJNjhQ==}
+  /find-my-way@8.1.0:
+    resolution: {integrity: sha512-41QwjCGcVTODUmLLqTMeoHeiozbMXYMAE1CKFiDyi9zVZ2Vjh0yz3MF0WQZoIb+cmzP/XlbFjlF2NtJmvZHznA==}
     engines: {node: '>=14'}
     dependencies:
       fast-deep-equal: 3.1.3

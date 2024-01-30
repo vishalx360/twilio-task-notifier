@@ -27,7 +27,7 @@
     "argon2": "^0.31.2",
     "date-fns": "^3.3.1",
     "dotenv": "^16.4.0",
-    "fastify": "^4.25.2",
+    "fastify": "^4.26.0",
     "fastify-plugin": "^4.5.1",
     "fastify-type-provider-zod": "^1.1.9",
     "twilio": "^4.20.1",
