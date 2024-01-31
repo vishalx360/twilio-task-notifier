@@ -22,10 +22,10 @@ dependencies:
     version: 2.1.0
   '@joggr/fastify-prisma':
     specifier: ^1.2.2
-    version: 1.2.2(@prisma/client@5.8.1)
+    version: 1.2.2(@prisma/client@5.9.0)
   '@prisma/client':
-    specifier: ^5.8.1
-    version: 5.8.1(prisma@5.8.1)
+    specifier: ^5.9.0
+    version: 5.9.0(prisma@5.8.1)
   '@t3-oss/env-core':
     specifier: ^0.7.3
     version: 0.7.3(typescript@5.3.3)(zod@3.22.4)
@@ -188,12 +188,12 @@ packages:
       wrap-ansi-cjs: /wrap-ansi@7.0.0
     dev: true
 
-  /@joggr/fastify-prisma@1.2.2(@prisma/client@5.8.1):
+  /@joggr/fastify-prisma@1.2.2(@prisma/client@5.9.0):
     resolution: {integrity: sha512-uCqeqbfQum6mpU7FNZNIBDvdO3beneiuIrs9ItkyDuiKlWOi6Spi2mDphSuFlX/eZz3peZZuiQGVtxWTLhJsog==}
     peerDependencies:
       '@prisma/client': 4.x || 5.x
     dependencies:
-      '@prisma/client': 5.8.1(prisma@5.8.1)
+      '@prisma/client': 5.9.0(prisma@5.8.1)
       fastify-plugin: 4.5.1
     dev: false
 
@@ -232,8 +232,8 @@ packages:
     dev: true
     optional: true
 
-  /@prisma/client@5.8.1(prisma@5.8.1):
-    resolution: {integrity: sha512-xQtMPfbIwLlbm0VVIVQY2yqQVOxPwRQhvIp7Z3m2900g1bu/zRHKhYZJQWELqmjl6d8YwBy0K2NvMqh47v1ubw==}
+  /@prisma/client@5.9.0(prisma@5.8.1):
+    resolution: {integrity: sha512-dHvFZgCT0BpRS+gRhk3S+50DstXMmVowxbrPeUJaK7sjNq5OhzfpT/OGE1kq9z5Q8WmOwIXJXyxP8O2CmP+nSg==}
     engines: {node: '>=16.13'}
     requiresBuild: true
     peerDependencies:
