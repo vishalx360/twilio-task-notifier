@@ -22,7 +22,7 @@
     "@fastify/swagger": "^8.14.0",
     "@fastify/swagger-ui": "^2.1.0",
     "@joggr/fastify-prisma": "^1.2.2",
-    "@prisma/client": "^5.8.1",
+    "@prisma/client": "^5.9.1",
     "@t3-oss/env-core": "^0.7.3",
     "argon2": "^0.31.2",
     "date-fns": "^3.3.1",
