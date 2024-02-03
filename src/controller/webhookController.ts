@@ -5,6 +5,7 @@ import VoiceResponse from "twilio/lib/twiml/VoiceResponse";
 import { env } from "../env";
 import twilioClient from "../twilioClient";
 import { GetNewPriority } from "../util";
+import { sub } from "date-fns";
 
 export default async function webhookController(fastify: FastifyInstance) {
     // GET /api/webhook/update-task-priority
@@ -56,11 +57,15 @@ export default async function webhookController(fastify: FastifyInstance) {
         handler: async (_request, reply) => {
             try {
                 // Fetch tasks with due dates and users with priority
+                const currentTime = new Date();
                 const tasksWithUsers = await fastify.prisma.task.findMany({
                     where: {
                         status: { not: 'DONE' },
                         deleted_at: null,
-                        due_date: { lte: new Date() }, // Only fetch tasks with due dates in the past
+                        due_date: {
+                            lte: currentTime,
+                            gte: sub(currentTime, { minutes: 30 })
+                        }, // Only fetch tasks with due dates in the past 30mins
                     },
                     include: {
                         user: {

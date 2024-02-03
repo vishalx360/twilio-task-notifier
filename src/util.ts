@@ -17,13 +17,13 @@ export function GetNewPriority(due_date: Date) {
     const daysDifference = differenceInDays(startOfDay(new Date(due_date)), today);
 
     if (daysDifference <= 0) {
-        return 0; // Due date is today
+        return 0;
     } else if (daysDifference <= 1) {
-        return 1; // Due date is between tomorrow and day after tomorrow
+        return 1;
     } else if (daysDifference <= 2) {
-        return 2; // Due date is between tomorrow and day after tomorrow
+        return 2;
     } else {
-        return 3; // Due date is 3 days or more in the future
+        return 3;
     }
 }
 
