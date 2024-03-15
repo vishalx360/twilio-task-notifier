@@ -1,7 +1,5 @@
 # Twilio Task Notifier - Backend API
 
-> This repository contains my solution for an assignment related to the Backend Engineer Intern position at [Listed](https://listed.fans).
-
 > [Checkout hosted demo](https://twilio-task-notifier.onrender.com)
 
 > [Checkout Swagger/OpenAPI Documentation](https://twilio-task-notifier.onrender.com/documentation)
